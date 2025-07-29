@@ -10,11 +10,17 @@ import {prisma} from "@repo/db/client";
 import { middleware } from "./middleware.js";
 import {userSchema} from "@repo/common/user";
 import { rateLimitMiddleware } from "./ratelimiter-middleware.js";
-
+import cors from "cors"
 
 
 const app=express()
 app.use(express.json())
+app.use(cors({
+  origin: "http://localhost:3000", // allow frontend URL
+  methods: ["GET", "POST"],
+  credentials: true
+}));
+
 
 
 
@@ -232,7 +238,7 @@ app.post("/add-cart",middleware,async(req:Request,res:Response)=>{
             price: req.body.product.selling_price,
             }
         })
-        return res.status(201).json({
+         res.status(201).json({
             message:"Items Added to cart",
             cartItem
         })
@@ -295,9 +301,10 @@ app.delete("/remove-cart",middleware,async(req:Request,res:Response)=>{
 //Porduct API
 
 app.get("/get-all-product-detail",async (req:Request,res:Response)=>{
-     
+    
     try{
     const products= await prisma.product.findMany()
+    console.log(products)
     res.status(201).json(products)
     }
     catch(err){

@@ -7,20 +7,16 @@ import { HomePage } from "../screen/HomePage";
 import { Products } from "../screen/Products";
 import { Story } from "../screen/Story";
 import { Cart } from "../screen/Cart";
-import { Contact } from "../screen/Contact";
-import { FAQ } from "../screen/FAQ";
 
 
 export default function Home() {
   return (
    <div className="relative">
    <Provider store={store}>
-    <HomePage/>
+    {/* <HomePage/>
      <Products/>
-     <Story/>
-     {/* <Cart/> */}
-     {/* <FAQ/> */}
-     {/* <Contact/> */}
+     <Story/> */}
+     <Cart/>
      <Footer/>
     </Provider>
    </div>

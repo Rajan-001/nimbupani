@@ -2,3 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.circle {
+    padding:1%;
+    background-color:#fb4f4f;
+    /* height & width must be the same. */
+
+    /* Setting a 100% border radius makes the circle. */
+    border-radius:100%;
+  
+    /*Horizontal center, but that won't do everything.*/
+    text-align:center;
+  
+    
+    /*For correct centering, line-height must be two invervals less than width/height. For instance, 1-3, 2-4, 3-5. Font size doesn't factor into this.*/
+    line-height:1em;
+    color:white;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight:100;
+  
+  /*Want to add some cut-out lines? Uncomment to view.
+    border:2px #F2F2DF dashed; */
+}
+
+
+/* .value::before,
+.value::after {
+  content: "";
+  width: 97px;
+  height: 97px;
+  background: #fff;
+  border: 5px solid #262626;
+  border-bottom: none;
+  border-right: none;
+  position: absolute;
+  top: -48px;
+  left: 50%;
+  z-index: -1;
+  transform: translateX(-50%) scaleY(0.5) rotate(45deg);
+}
+
+.value::after {
+  border-right: 5px solid #262626;
+  border-bottom: 5px solid #262626;
+  border-top: none;
+  border-left: none;
+  top: auto;
+  bottom: -48px;
+} */

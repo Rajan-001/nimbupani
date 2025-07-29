@@ -35,6 +35,7 @@ model Product{
   rating Int
   cost_price Int
   description String
+  image_url String @default("")
   cartItem CartItem[]
 }
 
