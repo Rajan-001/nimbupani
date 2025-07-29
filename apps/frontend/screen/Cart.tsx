@@ -28,7 +28,7 @@ const products=await response.json();
 
   async function addToCart() {
     try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-cart`, {
+     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,6 +51,53 @@ const products=await response.json();
     console.error("❌ Error adding to cart:", err);
   }
   }
+ 
+   const checkOut=async()=>{
+    try{
+  const response=await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-order`)
+      const order = await response.json();
+    console.log("✅ Order Created:", order.id);
+
+       // ✅ 2️⃣ Open Razorpay checkout
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!, // ✅ Public Key (from Razorpay Dashboard)
+      amount: order.amount,
+      currency: "INR",
+      name: ` Plan`,
+      description: `Payment for  Plan`,
+      order_id: order.id, // ✅ Razorpay order_id from backend
+      handler: async function (response: any) {
+        console.log("✅ Razorpay Response:", response.razorpay_signature);
+
+        // ✅ 3️⃣ Send payment details to backend for signature verification
+        const verifyRes = await fetch("http://localhost:8000/verify-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            orderId: order.order_Id,   // 👈 comes from backend when creating order
+            status: order.status       // 👈 you can send CREATED or SUCCESS etc.
+          }),
+        }); 
+     }
+    }
+      // @ts-ignore
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  } catch (err) {
+    console.error(err);
+  }
+
+useEffect(() => {
+  const script = document.createElement("script");
+  script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  script.async = true;
+   script.onload = () => console.log("✅ Razorpay script loaded");
+  document.body.appendChild(script);
+}, []);
+
 
   return (
     <div className='w-screen h-screen relative bg-yellow-50'>
@@ -277,6 +324,7 @@ const products=await response.json();
     {/* Checkout Button */}
     <a
       href="#"
+      onClick={()=>checkOut()}
       className="block bg-blue-500 hover:bg-blue-600 text-white text-center py-3 rounded-md text-lg mt-6 mb-4"
     >
       Checkout

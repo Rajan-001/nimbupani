@@ -37,6 +37,8 @@ model Product{
   description String
   image_url String @default("")
   cartItem CartItem[]
+
+  OrderItems OrderItems[]
 }
 
 model Cart{
@@ -44,7 +46,6 @@ model Cart{
   userId Int @unique
   cartItem CartItem[]
   userCart UserInfo @relation(fields: [userId],references: [id])
-  Payment Payments[]
   Order Orders[]
 }
 model CartItem{
@@ -70,7 +71,6 @@ model Payments{
     User_Id Int
     Payment_Status Status
     user UserInfo @relation(fields:[User_Id],references: [id])
-    cart Cart @relation(fields: [Product_Cart_Id],references: [id])
     order Orders[]
 }
 
@@ -79,10 +79,24 @@ model Orders{
   userId Int
   cartId Int
   orderDate DateTime @default(now())
+  order_id String
+  totalAmount Int
+  recepient String
   paymentId Int
+  order  OrderItems[]
   user UserInfo @relation(fields: [userId], references: [id])
   cart Cart @relation(fields: [cartId], references: [id])
   payment Payments @relation(fields: [paymentId],references: [id])
+}
+model OrderItems{
+  id Int @id @default(autoincrement())
+  orderId Int  @unique
+  productId Int 
+  quantity Int
+  price Int
+  cart Orders @relation(fields: [orderId],references: [id])
+  product Product @relation(fields: [productId],references: [id])
+  @@unique([orderId,productId])
 }
 
 enum Status{
