@@ -18,9 +18,11 @@ datasource db {
 model UserInfo{
   id Int @id @default(autoincrement())
   name String 
-  password String
+  password String?
   createdAt DateTime
   upadetAt DateTime @updatedAt
+  email String
+  provider String
   role Role @default(USER)
   carts Cart?
   payments Payments[]

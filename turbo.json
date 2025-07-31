@@ -6,6 +6,13 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"]
+            //  "env": [
+      //   "GOOGLE_CLIENT_ID",
+      //   "GOOGLE_CLIENT_SECRET",
+      //   "TWITTER_CLIENT_ID",
+      //   "TWITTER_CLIENT_SECRET",
+      //   "NEXTAUTH_URL"
+      // ]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -16,6 +23,15 @@
     "dev": {
       "cache": false,
       "persistent": true
+      // ,
+      // "env": [
+      //   "GOOGLE_CLIENT_ID",
+      //   "GOOGLE_CLIENT_SECRET",
+      //   "TWITTER_CLIENT_ID",
+      //   "TWITTER_CLIENT_SECRET",
+      //   "NEXTAUTH_URL"
+      // ]
     }
   }
+  
 }

@@ -22,6 +22,11 @@ const products=await response.json();
  SetLoaded(true)
   }
   fetchProductDetails()
+    const script = document.createElement("script");
+  script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  script.async = true;
+   script.onload = () => console.log("✅ Razorpay script loaded");
+  document.body.appendChild(script);
  },[])
 
 
@@ -89,14 +94,8 @@ const products=await response.json();
   } catch (err) {
     console.error(err);
   }
+}
 
-useEffect(() => {
-  const script = document.createElement("script");
-  script.src = "https://checkout.razorpay.com/v1/checkout.js";
-  script.async = true;
-   script.onload = () => console.log("✅ Razorpay script loaded");
-  document.body.appendChild(script);
-}, []);
 
 
   return (

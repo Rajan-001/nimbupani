@@ -7,6 +7,7 @@ import { HomePage } from "../screen/HomePage";
 import { Products } from "../screen/Products";
 import { Story } from "../screen/Story";
 import { Cart } from "../screen/Cart";
+import LoginButton from "./components/SignIn";
 
 
 export default function Home() {
@@ -16,8 +17,9 @@ export default function Home() {
     {/* <HomePage/>
      <Products/>
      <Story/> */}
-     <Cart/>
-     <Footer/>
+     {/* <Cart/>
+     <Footer/> */}
+     <LoginButton/>
     </Provider>
    </div>
   );
