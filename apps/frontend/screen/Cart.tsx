@@ -1,10 +1,13 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { FaMinus, FaPlus } from 'react-icons/fa';
-import { colorVariants } from './HomePage';
-import { BsFillCartCheckFill } from "react-icons/bs";
+import { FaMinus, FaPlus, FaTimes } from 'react-icons/fa';
 
+import { BsFillCartCheckFill } from "react-icons/bs";
+import { PaymentFailureStatus } from '../app/components/PaymentComponents/PaymentFailureStatus';
+import { PaymentSuccessfulStatus } from '../app/components/PaymentComponents/PaymentSuccessStatus';
+import { colorVariants } from '../lib/variants';
+import { useRouter } from 'next/navigation';
 
 
 export const Cart = () => {
@@ -13,6 +16,12 @@ export const Cart = () => {
  const [products,SetProducts]=useState([])
  const [loaded,SetLoaded]=useState(false)
  const [cartClicked,SetCartClicked]=useState(false)
+ const[cartList,SetCartList]=useState([])
+ const[totalCartProducts,SetTotalCartProducts]=useState(null)
+ const[sellingPrice,TotalPrice]=useState(null)
+   const [paymentStatus, setPaymentStatus] = useState<"idle" | "success" | "failed">("idle");
+  const router=useRouter()
+
  useEffect(()=>{
   async function fetchProductDetails(){
     console.log()
@@ -33,59 +42,110 @@ const products=await response.json();
 
   async function addToCart() {
     try {
+      if(quantity>0)
+      {
      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-cart`, {
       method: "POST",
+      credentials:'include',
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         productId:products[flavour]?.id,
         quantity,
-        
+        selling_price:products[flavour]?.selling_price
       }),
     });
-
+    
     const data = await response.json();
     if (!response.ok) {
+        router.push("/profile")
       throw new Error(data.message || "Failed to add to cart");
     }
 
-    console.log("✅ Cart updated:", data);
-    return data;
+   getCart()
+  }
+  else{
+    getCart()
+  }
   } catch (err) {
-    console.error("❌ Error adding to cart:", err);
+    router.push("/profile")
+   
   }
   }
  
+  const getCart=async()=>{
+
+    const res=await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-cart`, {
+      method: "GET",
+      credentials:'include',
+      
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+        router.push("/profile")
+    }else{
+    
+    const cartList=data.response.cartItem;
+    SetCartList(cartList)
+    const price=cartList.reduce((acc,item)=> { return acc+ item.price*item.quantity },0)
+    SetTotalCartProducts(cartList.length)
+    TotalPrice(price)
+  }
+}
+
    const checkOut=async()=>{
     try{
-  const response=await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-order`)
+  const response=await fetch(`${process.env.NEXT_PUBLIC_API_URL!}/checkout`,{
+    method:"POST",
+    credentials: "include"
+  })
       const order = await response.json();
-    console.log("✅ Order Created:", order.id);
-
+      console.log("order",order)
+    console.log("✅ Order Created:", order.orderData);
+    console.log("Rajorpay key id",process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!)
        // ✅ 2️⃣ Open Razorpay checkout
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!, // ✅ Public Key (from Razorpay Dashboard)
-      amount: order.amount,
+      amount: order.orderData.totalAmount*100,
       currency: "INR",
       name: ` Plan`,
       description: `Payment for  Plan`,
-      order_id: order.id, // ✅ Razorpay order_id from backend
+      order_id: order.orderData.order_id, // ✅ Razorpay order_id from backend
       handler: async function (response: any) {
+
+        console.log("options",options)
         console.log("✅ Razorpay Response:", response.razorpay_signature);
+         console.log("razorpay_order_id:", response.razorpay_order_id);
+        console.log("razorpay_payment_id:", response.razorpay_payment_id);
+
 
         // ✅ 3️⃣ Send payment details to backend for signature verification
-        const verifyRes = await fetch("http://localhost:8000/verify-payment", {
+        const verifyRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL!}/verify-payment`, {
           method: "POST",
+          credentials:"include",
           headers: { "Content-Type": "application/json" },
          body: JSON.stringify({
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
-            orderId: order.order_Id,   // 👈 comes from backend when creating order
-            status: order.status       // 👈 you can send CREATED or SUCCESS etc.
+            orderId: order.orderData.order_Id,   // 👈 comes from backend when creating order
+            status: order.orderData.status,       // 👈 you can send CREATED or SUCCESS etc.
+            cartId:order.orderData.cartId
           }),
         }); 
+  
+        
+      const {success} = await verifyRes.json();
+        console.log(success)
+         console.log(success)
+       if (success === true) {
+        setPaymentStatus("success");
+      } else {
+        setPaymentStatus("failed");
+      }  
+        
      }
     }
       // @ts-ignore
@@ -94,6 +154,27 @@ const products=await response.json();
   } catch (err) {
     console.error(err);
   }
+}
+
+const removefromCart=async(productId)=>{
+   try{
+   const response=await fetch(`${process.env.NEXT_PUBLIC_API_URL!}/remove-cart`, {
+      method: "DELETE",
+      credentials:'include',
+       headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+       productId
+      })
+    });
+    getCart();
+   }
+   catch(err)
+   {
+    console.log(err)
+   }
+   
 }
 
 
@@ -211,16 +292,16 @@ const products=await response.json();
         <div className='w-[93vw] h-[91vh] absolute flex top-8 left-4 '>
          <div className='w-3/5 h-full flex   justify-center items-center relative '>
             <div className=' h-2/3 w-2/3  '>
-              <Image className='w-full h-full object-contain' unoptimized src={products[flavour].image_url} width={40} height={50} alt={"product Image"} />
+              <Image className='w-full h-full object-contain' unoptimized src={products[flavour]?.image_url} width={40} height={50} alt={"product Image"} />
              
             </div>
-             <div className="absolute top-14 right-32 circle w-24 h-24 text-xl text-center flex flex-col justify-center items-center"> <div>{products[flavour].quantity}</div><div>left</div></div>
+             <div className="absolute top-14 right-32 circle w-24 h-24 text-xl text-center flex flex-col justify-center items-center"> <div>{products[flavour]?.quantity}</div><div>left</div></div>
              <div className="absolute bottom-12 left-[250px] w-32 h-14 flex justify-center items-center bg-neutral-800 text-gray-100 text-xl">
            <div><Image width={20} height={34} unoptimized className='object-cover w-10 h-10' src={"/svg/ruppe.svg"} alt={''}  /></div>
            <div className='w-2'></div>
            <div>{products[flavour].selling_price}</div>
             </div>
-        <div className='absolute top-8  text-center text-2xl flex font-semibold justify-center items-center w-full h-14'>{products[flavour].name}</div>
+        <div className='absolute top-8  text-center text-2xl flex font-semibold justify-center items-center w-full h-14'>{products[flavour]?.name}</div>
          </div>
          <div className=' h-full w-2/5'>
         
@@ -270,7 +351,7 @@ const products=await response.json();
           </div>
 
           <div className='w-full h-1/3 flex justify-center items-center'>
-            <div onClick={()=>{SetCartClicked(true);addToCart()}} className=" h-12 w-36 flex justify-center items-center bg-black text-white rounded-full cursor-pointer hover:bg-gray-800 transition-colors">
+            <div onClick={()=>{addToCart();SetCartClicked(true)}} className=" h-12 w-36 flex justify-center items-center bg-black text-white rounded-full cursor-pointer hover:bg-gray-800 transition-colors">
                 Buy Now
             </div>
         </div>
@@ -285,40 +366,59 @@ const products=await response.json();
         <i className="fas fa-shopping-cart fa-2x"></i><sub id="clickme">0</sub>
         <span className="caret "></span>
     </button>
-     <div><BsFillCartCheckFill className='w-10 h-10 text-black absolute top-2 right-44'/></div>
+     <div  onClick={()=>{SetCartClicked(true);addToCart()}}><BsFillCartCheckFill className='w-10 h-10 text-black absolute top-2 right-44'/></div>
      {
-      cartClicked && <div className="mx-auto w-4/5 absolute top-10 right-36">
+      cartClicked && 
+     
+     <div  className="mx-auto w-4/5 absolute top-10 right-36">
   <div className="relative float-right mt-5 w-80 rounded-md bg-white p-5 shadow-md">
     
     {/* Header */}
-    <div className="border-b border-gray-200 pb-4 flex justify-between items-center">
-      <div className="flex items-center">
+    <div className="border-b border-gray-200 pb-4 flex justify-between w-full  ">
+      <div className=" flex items-center">
         <i className="fa fa-shopping-cart text-2xl text-gray-700 mr-2"></i>
-        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">3</span>
+        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">{totalCartProducts}</span>
       </div>
-      <div className="text-right">
+      <div className="flex justify-center items-center">
         <span className="text-gray-500 text-sm mr-1">Total:</span>
-        <span className="text-blue-500 font-semibold">$2,229.97</span>
+        <span className="text-blue-500 font-semibold">${sellingPrice}</span>
+
       </div>
+           <button
+             onClick={()=>SetCartClicked(false)}
+              className=" p-2 rounded-full bg-gray-100 hover:bg-red-500 hover:text-white transition"
+            >
+              <FaTimes className="w-5 h-5" />
+            </button>
     </div>
 
     {/* Items */}
-    <ul className="pt-5">
-      <li className="mb-5 flex">
+    {
+    cartList.map((x,i)=>(
+       <ul key={i} className="pt-5">
+      <li className="mb-5 flex justify-between">
         <img
-          className="w-12 h-12 object-cover mr-3"
-          src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item1.jpg"
+          className="w-12 h-12 object-contain mr-3"
+         src={`${x.product.image_url}`}
           alt="item1"
         />
         <div>
-          <span className="block text-base pt-1">Sony DSC-RX100M III</span>
-          <span className="text-blue-500 font-medium mr-2">$849.99</span>
-          <span className="text-gray-500 text-sm">Quantity: 01</span>
+          <span className="block text-base pt-1">{x.product.name}</span>
+          <span className="text-blue-500 font-medium mr-2">${x.product.selling_price}</span>
+          <span className="text-gray-500 text-sm">Quantity: {x.quantity}</span>
+        </div>
+        <div>
+             <button
+            className="ml-2 text-red-200 hover:text-red-700"
+            onClick={() => removefromCart(x.productId)}
+          >
+            ✖
+          </button>
         </div>
       </li>
-
-    
     </ul>
+    )) 
+}
 
     {/* Checkout Button */}
     <a
@@ -332,11 +432,18 @@ const products=await response.json();
     {/* Pointer Arrow (pseudo-element replacement) */}
     <div className="absolute -top-2 right-10 w-4 h-4 bg-white rotate-45 border-t border-l border-gray-200"></div>
   </div>
-</div>
+      </div>
+      
+      
 
      }
         </>
      } 
+       {paymentStatus === "success" && <PaymentSuccessfulStatus />}
+      {paymentStatus === "failed" && <PaymentFailureStatus />}
+
+
     </div>
   )
+
 }

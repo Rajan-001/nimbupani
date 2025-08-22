@@ -2,24 +2,18 @@
 
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
-import { Footer } from "../screen/Footer";
-import { HomePage } from "../screen/HomePage";
-import { Products } from "../screen/Products";
-import { Story } from "../screen/Story";
-import { Cart } from "../screen/Cart";
-import LoginButton from "./components/SignIn";
+
+import Login from "./components/Login";
+import SignUp from "./components/SignUpIn";
+import SignUpIn from "./components/SignUpIn";
 
 
 export default function Home() {
   return (
    <div className="relative">
    <Provider store={store}>
-    {/* <HomePage/>
-     <Products/>
-     <Story/> */}
-     {/* <Cart/>
-     <Footer/> */}
-     <LoginButton/>
+   
+     <SignUpIn/>
     </Provider>
    </div>
   );

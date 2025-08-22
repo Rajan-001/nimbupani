@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 export const Button = ({buttonText}:{buttonText:string}) => {
  
     return (
-   <motion.div initial="intial" whileHover="hover" className="cursor-pointer w-24 mr-4 h-12 overflow-hidden relative uppercase text-center text-[18px] bg-sky-50">
+   <motion.div initial="intial" whileHover="hover" className="cursor-pointer w-32 mr-4 h-16 overflow-hidden relative uppercase text-center text-[18px] bg-sky-50">
   <motion.div
     variants={{
           initial: { y: "0%" },

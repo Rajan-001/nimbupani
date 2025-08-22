@@ -16,13 +16,13 @@ datasource db {
 
 
 model UserInfo{
-  id Int @id @default(autoincrement())
-  name String 
+  id Int @id @default(autoincrement()) @unique
+  name String? 
   password String?
-  createdAt DateTime
+  createdAt DateTime @default(now())
   upadetAt DateTime @updatedAt
-  email String
-  provider String
+  email String? @unique
+  provider String?
   role Role @default(USER)
   carts Cart?
   payments Payments[]
@@ -54,6 +54,7 @@ model CartItem{
   id Int @id @default(autoincrement())
   cartId Int 
   productId Int 
+  
   quantity Int
   price Int
   cart Cart @relation(fields: [cartId],references: [id])
@@ -70,10 +71,15 @@ enum Role{
 model Payments{
     id Int @id @default(autoincrement())
     Product_Cart_Id Int 
-    User_Id Int
-    Payment_Status Status
+    User_Id Int @unique
+    orderId String @unique
+    Payment_Status Status @default(pending)
+  razorpay_payment_id String   @unique
+  razorpay_signature String?
+  paymentDate       DateTime  @default(now())
+  razorpay_order_id String    @unique
     user UserInfo @relation(fields:[User_Id],references: [id])
-    order Orders[]
+    orders Orders @relation(fields: [orderId],references: [order_id])
 }
 
 model Orders{
@@ -81,18 +87,20 @@ model Orders{
   userId Int
   cartId Int
   orderDate DateTime @default(now())
-  order_id String
+  order_id String @unique
+  status Status @default(created)
   totalAmount Int
+  currency String
   recepient String
-  paymentId Int
-  order  OrderItems[]
+  orderItem  OrderItems[]
   user UserInfo @relation(fields: [userId], references: [id])
   cart Cart @relation(fields: [cartId], references: [id])
-  payment Payments @relation(fields: [paymentId],references: [id])
+  payments Payments[]
+
 }
 model OrderItems{
   id Int @id @default(autoincrement())
-  orderId Int  @unique
+  orderId Int 
   productId Int 
   quantity Int
   price Int
@@ -102,7 +110,10 @@ model OrderItems{
 }
 
 enum Status{
-  Sucessful
+  pending
+  success
   failed
-  Retry
+  created
+  attempted
+  paid
 }

@@ -3,13 +3,14 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion';
 import { IoMdClose } from 'react-icons/io';
-import { colorVariants } from './HomePage';
+import { colorVariants } from '../lib/variants';
+
 
 
 export const Products = () => {
 
-  const [Open,SetOpenProduct]=useState(null)
-
+  const [Open,SetOpenProduct]=useState<number | 0>(0);
+  console.log(Open)
   return (
     <div className='w-[100vw]  h-[180vh] relative'>
 
@@ -19,7 +20,7 @@ export const Products = () => {
                 Open&&
                 <motion.div className='  flex justify-center items-center bg-black/30 backdrop-blur-sm fixed inset-0 z-50'>
                 <motion.div initial={{scale:0}} animate={{scale:1}} exit={{scale:0.8}} transition={{duration:0.3}} className='w-[calc(100vw-300px)]  relative bg-white p-2 rounded-2xl'>
-                   <Image unoptimized className='h-full w-full inline' src={colorVariants[Open].description} width={30} height={40} alt='product-description'/>
+                   <Image unoptimized className='h-full w-full inline' src={colorVariants[Open]!.description} width={30} height={40} alt='product-description'/>
                    <div className='w-16 h-16 flex items-center rounded-full absolute top-0 -right-20 cursor-pointer p-4 bg-blue-950 text-white' onClick={()=>SetOpenProduct(null)}>
                     <IoMdClose className='h-full w-full text-white ' />
                    </div>
@@ -49,7 +50,7 @@ export const Products = () => {
                 WebkitMaskPosition: 'center'
                 }}>
             </div>
-            <motion.div whileHover={{scale:[0.8,0.9,1]}} onClick={()=>{SetOpenProduct(i)}} className='w-12 h-12  z-6 hover:bg-blue-950 hover:text-white rounded-full bg-white flex justify-center items-center absolute top-3 right-4 text-2xl font-bold cursor-pointer'>i</motion.div>
+            <motion.div whileHover={{scale:[0.8,0.9,1]}} onClick={()=>{SetOpenProduct(i)}} className='w-12 h-12  z-30 hover:bg-blue-950 hover:text-white rounded-full bg-white flex justify-center items-center absolute top-3 right-4 text-2xl font-bold cursor-pointer'>i</motion.div>
         
             <Image
               unoptimized
@@ -57,7 +58,7 @@ export const Products = () => {
               height={40}
               src={variant.image}
               alt={variant.name}
-              className='w-full top-18 absolute group-hover:rotate-8 z-3 group-hover:scale-110 duration-300 h-2/3 object-contain'
+              className='w-full top-18 absolute top-12 group-hover:rotate-8 z-3 group-hover:scale-110 duration-300 h-2/3 object-contain'
             />
               <Image
               unoptimized
@@ -67,7 +68,7 @@ export const Products = () => {
               alt={variant.name}
               className='w-full absolute group-hover:scale-110 duration-300  h-full object-cover'
             />
-             <div className='text-3xl  text-blue-950 z-30 text-center absolute w-full bottom-18 '>
+             <div className='text-3xl  text-blue-950 z-30 text-center absolute w-full bottom-20 '>
                 {variant.name}
              </div>
              <div className='text-xl absolute w-full text-center bottom-8 text-white'>

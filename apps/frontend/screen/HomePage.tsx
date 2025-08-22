@@ -7,57 +7,9 @@ import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../app/hook'
 import { selectCount, increment } from '../redux/slices/cartSlice'
 import { Button } from '../app/components/Button'
+import { colorVariants } from '../lib/variants'
 
-export const colorVariants = [
-  { 
-    id: 1,
-    name: "MANGO BLAST", 
-    color: "#FFD966", 
-    video: "/videos/charlies_yellow.webm",
-    image: "/images/products/yellow-product.avif",
-    description: "/images/product-description/yellow.avif"
-  },
-  { 
-    id: 2,
-    name: "COCONUT TWIST", 
-    color: "#B2EBF2", 
-    video: "/videos/charlies_lightblue.webm",
-    image: "/images/products/skyblue-product.avif",
-    description: "/images/product-description/blue.avif"
-  },
-  { 
-    id: 3,
-    name: "GUAVA FIZZ", 
-    color: "#AED581", 
-    video: "/videos/charlies_lightgreen.webm",
-    image: "/images/products/green-product.avif",
-    description: "/images/product-description/green.avif"
-  },
-  { 
-    id: 4,
-    name: "LYCHEE BURST", 
-    color: "#FFCCBC", 
-    video: "/videos/charlies_orange.webm",
-    image: "/images/products/orange-product.avif",
-    description: "/images/product-description/orange.avif"
-  },
-  { 
-    id: 5,
-    name: "WATERMELON SPLASH", 
-    color: "#ecb1be", 
-    video: "/videos/charlies_pink.webm",
-    image: "/images/products/pink-product.avif",
-    description: "/images/product-description/pink.avif"
-  },
-  { 
-    id: 6,
-    name: "STRAWBERRY SWIRL", 
-    color: "#a19bd9", 
-    video: "/videos/charlies_purple.webm",
-    image: "/images/products/purple-product.avif",
-    description: "/images/product-description/purple.avif"
-  },
-];
+
 
 export const HomePage = () => {
 const x = useMotionValue(750);
@@ -144,7 +96,7 @@ const smoothY = useSpring(y, { stiffness: 100, damping: 20 });
         </div>
       </div>
        <div className='z-1 absolute flex top-32 left-1/4 h-fit w-fit  '>
-          <Image src="/svg/Bring-On-Cheers.svg" className='border-2 h-[60vh] w-[50vw]' width={20} height={30} alt="4rew" />
+          <Image src="/svg/Bring-On-Cheers.svg" className=' h-[60vh] w-[50vw]' width={20} height={30} alt="4rew" />
          </div>
   <div className='absolute z-2 flex top-0 left-1/7 h-fit w-fit bg-transparent '>
        <video autoPlay muted loop src={`${colorVariants[count].video}`} className='h-[95vh] w-[70vw] bg-transparent '/>

@@ -1,6 +1,6 @@
 
 
-import { safeParse } from "zod"
+import { includes, safeParse } from "zod"
 import jwt from "jsonwebtoken"
 import express from "express";
 import { Request,Response } from "express";
@@ -10,18 +10,23 @@ import {prisma} from "@repo/db/client";
 import { middleware } from "./middleware.js";
 import {userSchema} from "@repo/common/user";
 import { rateLimitMiddleware } from "./ratelimiter-middleware.js";
+import {JWT_SECRET, RAZORPAY_ID, RAZORPAY_KEY_SECRET} from "@repo/backend-common/common"
 import cors from "cors"
+
+import cookieParser from "cookie-parser";
+import { connect } from "http2";
 
 
 const app=express()
 app.use(express.json())
 app.use(cors({
   origin: "http://localhost:3000", // allow frontend URL
-  methods: ["GET", "POST"],
+  methods: ["GET", "POST","DELETE"],
   credentials: true
 }));
 
 
+app.use(cookieParser())
 
 
 
@@ -57,20 +62,35 @@ app.post("/signin",async (req:Request,res:Response)=>{
         return
     }
     try{
+        
          const response=await prisma.userInfo.findFirst({
             where:{
                 name:parsedData.data.name,
                 password:parsedData.data.password
             }
          })
+         
           //@ts-ignore
-         const token=jwt.sign({userId:response.id},process.env.JWT_SECRET!)
-         res.json({
-            token
-         })
-
+         const token=jwt.sign({userId:response.id},JWT_SECRET!)
+       res.cookie("token", token, {
+            httpOnly: true,   // ✅ cannot be accessed via JS
+            secure: false,    // ✅ set to true only if you have HTTPS (you can change later)
+            sameSite: "lax" // ✅ prevents CSRF
+            });
+            
+      if(token)
+      {
+      res.status(200).json({
+        message:"able to do signIn"
+      })
+      }else{
+        res.status(407).json({
+            message:"Not able to create token"
+        })
+      }
     }
     catch(err){
+        console.log(err)
         res.status(404).json({
             Error:err
         })
@@ -183,10 +203,27 @@ app.post("/get-order",middleware,async (req:Request,res:Response)=>{
 app.get("/get-cart",middleware,async(req:Request,res:Response)=>{
     
     try{
-        const response=prisma.cart.findFirst({
-             //@ts-ignore
+        const response=await prisma.cart.findUnique({
+           where:{
+            //@ts-ignore
             userId:req.id
+           },
+           include:{
+            cartItem:{
+                include:{
+                    product:{
+                        select:{
+                             name:true,
+                             selling_price:true,
+                             image_url:true
+                        }
+                    }
+                }
+            },
+            Order:true
+           }
         })
+        console.log(response)
         if(!response){
             res.status(411).json({
                 Err:"Not able to get the cart"
@@ -206,19 +243,25 @@ app.get("/get-cart",middleware,async(req:Request,res:Response)=>{
 })
 
 app.post("/add-cart",middleware,async(req:Request,res:Response)=>{
-
+    //@ts-ignore
+  
     try{
         const cart=await prisma.cart.upsert({
-             //@ts-ignore
-           where:{ userId:req.id},
-           create:{
+            //@ts-ignore
+            where: { userId: req.id! },
+            create: {
+                //@ts-ignore
+                userId: req.id!,
+            },
+            update: {
 
-             //@ts-ignore
-               userId:req.id,
-           },
-           update:{}
+            }
         })
        
+        console.log("cart",cart)
+     console.log("productId",req.body.productId)
+     console.log("quantity",req.body.quantity)
+   console.log("selling price",req.body.selling_price)
 
 
         const cartItem=await prisma.cartItem.upsert({
@@ -235,9 +278,10 @@ app.post("/add-cart",middleware,async(req:Request,res:Response)=>{
                 cart: { connect: { id: cart.id }},
                 product: { connect: { id: req.body.productId } },
                 quantity:req.body.quantity,
-            price: req.body.product.selling_price,
+            price: req.body.selling_price,
             }
         })
+        console.log("cart-Item",cartItem)
          res.status(201).json({
             message:"Items Added to cart",
             cartItem
@@ -262,33 +306,32 @@ app.post("/add-cart",middleware,async(req:Request,res:Response)=>{
 })
 
 app.delete("/remove-cart",middleware,async(req:Request,res:Response)=>{
-    
+    const ProductId=req.body.productId
+    console.log(ProductId)
     try{
-        const cart=await prisma.cart.upsert({
+        const cart=await prisma.cart.update({
              //@ts-ignore
            where:{ userId:req.id},
-           create:{
-             //@ts-ignore
-               userId:req.id,
-           },update:{}
+           //@ts-ignore
+           data:{
+            cartItem:{
+                deleteMany:{
+                    productId:ProductId
+                }
+            }
+           }
+           
         })
        
   if(!cart){
             res.status(411).json({
-                Err:"Not able to get the cart"
+                Err:"Not able to delete from cart the cart"
             })
         }
-
-        const cartItem=await prisma.cartItem.delete({
-            where:{ cartId_productId: {
-                cartId: cart.id,
-          productId: req.body.productId,
-            } }
-
-        })
+     
         return res.status(201).json({
-            message:"Product removed from cart",
-            cartItem
+           cart
+            
         })
     }catch(err){
         res.status(500).json({
@@ -368,10 +411,11 @@ app.get("/get-product-detail",async (req:Request,res:Response)=>{
 
 // app.use(rateLimiter({ windowInSeconds: 60, maxRequests: 10 }));
 app.post("/checkout", middleware, async (req: Request, res: Response) => {
+    console.log("i am in checkout")
   try {
     // 1️⃣ Get the logged-in user ID from middleware
     //@ts-ignore
-    const userId = req.id;
+    const userId = req.id!;
 
     // 2️⃣ Find the cart for the user (with cart items + product details)
     const cart = await prisma.cart.findUnique({
@@ -385,16 +429,19 @@ app.post("/checkout", middleware, async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Cart is empty" });
     }
 
+    console.log("cart",cart)
+
     // 3️⃣ Calculate total price
     const totalAmount = cart.cartItem.reduce((sum, item) => {
       return sum + item.quantity * item.price;
     }, 0);
 
 
-   
+    console.log("Total amount",totalAmount)
+
   const razorpay = new Razorpay({
-        key_id: process.env.RAZORPAY_ID!,
-        key_secret: process.env.RAZORPAY_KEY_SECRET!,
+        key_id: RAZORPAY_ID!,
+        key_secret: RAZORPAY_KEY_SECRET!,
       });
       
     const options = {
@@ -402,31 +449,36 @@ app.post("/checkout", middleware, async (req: Request, res: Response) => {
       currency: "INR",
       receipt: `receipt_${Date.now()}`,
     };
-
+   console.log("options",options)
     const order = await razorpay.orders.create(options);
     const {currency,id,status}=order
-    const receipt = order.receipt ?? "default-receipt";
+    const recepient = order.receipt ?? "default-receipt";
     
   
   const orderData=  await prisma.orders.create({
       data: {
-        userId,
+        user: { connect: { id: userId } },    
+        //@ts-ignore
+      cart: { connect: { id: cart.id } },  
         totalAmount,
         currency,
-        order_Id:id,
-        receipt,
-        status: "created",
-        paymentMethod: req.body.paymentMethod , 
-        orderItems: {
+        order_id:id,
+        recepient,
+        
+        //@ts-ignore
+        orderItem: {
           create: cart.cartItem.map((item) => ({
             productId: item.productId,
             quantity: item.quantity,
             price: item.price,
           })),
+    
         },
       },
      
     });
+
+    console.log("order data item",orderData)
 
     // 5️⃣ Optional: Clear the cart after order creation
     await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
@@ -442,7 +494,7 @@ app.post("/checkout", middleware, async (req: Request, res: Response) => {
 
 
 
-app.post("/verify-payment", async (req, res) => {
+app.post("/verify-payment",middleware, async (req, res) => {
   try {
 const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
    console.log(razorpay_order_id)
@@ -450,32 +502,45 @@ const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = 
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
     const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .createHmac("sha256", RAZORPAY_KEY_SECRET!)
       .update(sign.toString())
       .digest("hex");
 
     console.log("Generated Signature:", expectedSignature);
     console.log("Received Signature:", razorpay_signature);
-
+    //@ts-ignore
+   console.log("request id",req.id)
     if (expectedSignature === razorpay_signature) {
       console.log("✅ Payment Verified");
 
       const payment = await prisma.payments.create({
+      
         data: {
-          orderId: orderId, // coming from frontend
+              //@ts-ignore
+          orderId, // coming from frontend
+          Product_Cart_Id:req.body.cartId,
           razorpay_order_id: razorpay_order_id,
           razorpay_payment_id: razorpay_payment_id,
           razorpay_signature: razorpay_signature,
-          status: "success", // from your enum Status (SUCCESS, REFUNDED, FAILED)
+        
+            //@ts-ignore
+          Payment_Status: "success", // from your enum Status (SUCCESS, REFUNDED, FAILED)
           paymentDate:new Date(),
-          order: {
-      connect: { order_Id: razorpay_order_id }
-    }
+          orders: {
+      connect: { order_id:razorpay_order_id }
+    },
+      user:{
+        connect:{
+        //@ts-ignore
+          id:req.id,
+        }
+      }
         },
       });
+      console.log(payment)
 
       // 👉 Here you can update DB to mark the order as PAID
-      return res.json({ success: true });
+      return res.status(200).json({ success: true });
     } else {
       console.log("❌ Signature mismatch! Possible fraud");
       return res.status(400).json({ success: false });
