@@ -9,7 +9,7 @@ import { colorVariants } from '../lib/variants';
 
 export const Products = () => {
 
-  const [Open,SetOpenProduct]=useState<number | 0>(0);
+  const [Open,SetOpenProduct]=useState<null | 0>(0);
   console.log(Open)
   return (
     <div className='w-[100vw]  h-[180vh] relative'>
@@ -21,6 +21,7 @@ export const Products = () => {
                 <motion.div className='  flex justify-center items-center bg-black/30 backdrop-blur-sm fixed inset-0 z-50'>
                 <motion.div initial={{scale:0}} animate={{scale:1}} exit={{scale:0.8}} transition={{duration:0.3}} className='w-[calc(100vw-300px)]  relative bg-white p-2 rounded-2xl'>
                    <Image unoptimized className='h-full w-full inline' src={colorVariants[Open]!.description} width={30} height={40} alt='product-description'/>
+                   
                    <div className='w-16 h-16 flex items-center rounded-full absolute top-0 -right-20 cursor-pointer p-4 bg-blue-950 text-white' onClick={()=>SetOpenProduct(null)}>
                     <IoMdClose className='h-full w-full text-white ' />
                    </div>
@@ -30,7 +31,7 @@ export const Products = () => {
         </AnimatePresence>
            
       <div className='grid grid-cols-3 overflow-hidden border-2 h-full w-full relative justify-center items-center gap-x-8 gap-y-6 px-6 py-4'>
-        {colorVariants.map((variant, i) => (
+        {colorVariants.map((variant:any, i:any) => (
           <div key={i}
           className='flex relative bg-amber-400 w-full h-full'
           >

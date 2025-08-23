@@ -1,5 +1,5 @@
 
-export const colorVariants = [
+export const colorVariants:any = [
   { 
     id: 1,
     name: "MANGO BLAST", 

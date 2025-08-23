@@ -5,7 +5,7 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { RiTwitterXFill } from "react-icons/ri";
 import Login from "./Login";
-export default function SignUp({setSignUpModal,setLoginModal}) {
+export default function SignUp({setSignUpModal,setLoginModal}:{setSignUpModal:any,setLoginModal:any}) {
      const { data: session, status } =  useSession()
      const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

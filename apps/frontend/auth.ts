@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthConfig } from "next-auth"
 import Google from "next-auth/providers/google"
 import Twitter from "next-auth/providers/twitter"
 import {prisma} from "@repo/db/client";
@@ -7,7 +7,9 @@ import {JWT_SECRET} from "@repo/backend-common/common"
 import { cookies } from "next/headers";
 
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+
+//@ts-ignore
+export const { handlers, auth, signIn, signOut }:NextAuthConfig = NextAuth({
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -24,6 +26,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
    clientId: process.env.AUTH_TWITTER_ID!,
       // eslint-disable-next-line turbo/no-undeclared-env-vars
       clientSecret: process.env.AUTH_TWITTER_SECRET!,
+      //@ts-ignore
       version: "2.0" 
     })
    

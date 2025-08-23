@@ -64,7 +64,7 @@ const faqData = [
 export const FAQ = () => {
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
 
-  function toggleFaq(index){
+  function toggleFaq(index:any){
     console.log(index)
    setOpenIndexes((prev)=>prev.includes(index)?prev.filter((i)=>i!=index):[...prev,index])
   }

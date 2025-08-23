@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 export const Cart = () => {
  const [flavour,setFlavour]=useState(1)
  const[quantity,setQuantity]=useState(0)
- const [products,SetProducts]=useState([])
+ const [products,SetProducts]=useState<any>([])
  const [loaded,SetLoaded]=useState(false)
  const [cartClicked,SetCartClicked]=useState(false)
  const[cartList,SetCartList]=useState([])
@@ -51,8 +51,10 @@ const products=await response.json();
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        //@ts-ignore
         productId:products[flavour]?.id,
         quantity,
+        //@ts-ignore
         selling_price:products[flavour]?.selling_price
       }),
     });
@@ -89,6 +91,7 @@ const products=await response.json();
     
     const cartList=data.response.cartItem;
     SetCartList(cartList)
+    //@ts-ignore
     const price=cartList.reduce((acc,item)=> { return acc+ item.price*item.quantity },0)
     SetTotalCartProducts(cartList.length)
     TotalPrice(price)
@@ -155,7 +158,7 @@ const products=await response.json();
     console.error(err);
   }
 }
-
+//@ts-ignore
 const removefromCart=async(productId)=>{
    try{
    const response=await fetch(`${process.env.NEXT_PUBLIC_API_URL!}/remove-cart`, {
@@ -307,9 +310,10 @@ const removefromCart=async(productId)=>{
         
         <div className='h-2/3 flex w-full '>
             <div className='grid grid-cols-3 h-full w-full gap-1'>
-                { products.map((color,i)=>(
+                { products.map((color:any,i:any)=>(
                     <div key={i} onClick={()=>{setFlavour(i)}} className='cursor-pointer w-full h-full relative  '>
                          <div className='flex   justify-center items-center w-full h-full'>
+                        
                          <Image unoptimized className='h-1/2 w-1/2 object-contain' src={colorVariants[i].image} width={30} height={40} alt='products' />
                          </div>
                          <div className='absolute bottom-2  text-center text-sm flex font-semibold justify-center items-center w-full h-14'>{color.name}</div>
@@ -323,7 +327,8 @@ const removefromCart=async(productId)=>{
                             src="/svg/ruppe.svg"
                             alt="Rupee"
                           />
-                          <span className="font-semibold">{color.selling_price}</span>
+                         
+                          <span className="font-semibold">{color?.selling_price}</span>
                         </div>
 
                         </div>
@@ -394,7 +399,7 @@ const removefromCart=async(productId)=>{
 
     {/* Items */}
     {
-    cartList.map((x,i)=>(
+    cartList.map((x:any,i)=>(
        <ul key={i} className="pt-5">
       <li className="mb-5 flex justify-between">
         <img
