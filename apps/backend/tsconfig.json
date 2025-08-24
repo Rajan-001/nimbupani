@@ -2,7 +2,11 @@
     "extends": "@repo/typescript-config/base.json",
     "compilerOptions": {
          "rootDir": "./src",
-        "outDir": "./dist"
+        "outDir": "./dist",
+         "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
     },
-    
+    "include": ["./src"]
 }
