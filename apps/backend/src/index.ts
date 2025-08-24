@@ -432,7 +432,7 @@ app.post("/checkout", middleware, async (req: Request, res: Response) => {
     console.log("cart",cart)
 
     // 3️⃣ Calculate total price
-    const totalAmount = cart.cartItem.reduce((sum, item) => {
+    const totalAmount = cart.cartItem.reduce((sum:number, item:any) => {
       return sum + item.quantity * item.price;
     }, 0);
 
