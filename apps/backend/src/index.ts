@@ -467,7 +467,7 @@ app.post("/checkout", middleware, async (req: Request, res: Response) => {
         
         //@ts-ignore
         orderItem: {
-          create: cart.cartItem.map((item) => ({
+          create: cart.cartItem.map((item:any) => ({
             productId: item.productId,
             quantity: item.quantity,
             price: item.price,
