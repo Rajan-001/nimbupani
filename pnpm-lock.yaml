@@ -89,18 +89,51 @@ importers:
       '@auth/prisma-adapter':
         specifier: ^2.10.0
         version: 2.10.0(@prisma/client@6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3))
+      '@eslint/eslintrc':
+        specifier: ^3
+        version: 3.3.1
       '@prisma/client':
         specifier: ^6.12.0
         version: 6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3)
       '@reduxjs/toolkit':
         specifier: ^2.8.2
         version: 2.8.2(react-redux@9.2.0(@types/react@19.1.0)(react@19.1.0)(redux@5.0.1))(react@19.1.0)
+      '@repo/backend-common':
+        specifier: workspace:*
+        version: link:../../packages/backend-common
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@tailwindcss/postcss':
+        specifier: ^4
+        version: 4.1.11
       '@types/ioredis':
         specifier: ^4.28.10
         version: 4.28.10
       '@types/jsonwebtoken':
         specifier: ^9.0.10
         version: 9.0.10
+      '@types/node':
+        specifier: ^20.19.6
+        version: 20.19.9
+      '@types/react':
+        specifier: ^19
+        version: 19.1.0
+      '@types/react-dom':
+        specifier: ^19
+        version: 19.1.1(@types/react@19.1.0)
+      eslint:
+        specifier: ^9
+        version: 9.31.0(jiti@2.4.2)
+      eslint-config-next:
+        specifier: 15.3.3
+        version: 15.3.3(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)
       framer-motion:
         specifier: ^12.18.1
         version: 12.23.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -119,6 +152,9 @@ importers:
       next-auth:
         specifier: 5.0.0-beta.29
         version: 5.0.0-beta.29(next@15.3.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+      prisma:
+        specifier: ^6.11.1
+        version: 6.12.0(typescript@5.8.3)
       rate-limit-redis:
         specifier: ^4.2.1
         version: 4.2.1(express-rate-limit@7.5.1(express@5.1.0))
@@ -134,52 +170,15 @@ importers:
       react-redux:
         specifier: ^9.2.0
         version: 9.2.0(@types/react@19.1.0)(react@19.1.0)(redux@5.0.1)
-      zod:
-        specifier: ^4.0.2
-        version: 4.0.10
-    devDependencies:
-      '@eslint/eslintrc':
-        specifier: ^3
-        version: 3.3.1
-      '@repo/backend-common':
-        specifier: workspace:*
-        version: link:../../packages/backend-common
-      '@repo/db':
-        specifier: workspace:*
-        version: link:../../packages/db
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
-      '@repo/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      '@tailwindcss/postcss':
-        specifier: ^4
-        version: 4.1.11
-      '@types/node':
-        specifier: ^20.19.6
-        version: 20.19.9
-      '@types/react':
-        specifier: ^19
-        version: 19.1.0
-      '@types/react-dom':
-        specifier: ^19
-        version: 19.1.1(@types/react@19.1.0)
-      eslint:
-        specifier: ^9
-        version: 9.31.0(jiti@2.4.2)
-      eslint-config-next:
-        specifier: 15.3.3
-        version: 15.3.3(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)
-      prisma:
-        specifier: ^6.11.1
-        version: 6.12.0(typescript@5.8.3)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.17(ts-node@10.9.2(@types/node@20.19.9)(typescript@5.8.3))
       typescript:
         specifier: ^5
         version: 5.8.3
+      zod:
+        specifier: ^4.0.2
+        version: 4.0.10
 
   packages/backend-common:
     devDependencies:
