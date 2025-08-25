@@ -22,7 +22,12 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "razorpay": "^2.9.6",
-    "zod": "^4.0.10"
+    "zod": "^4.0.10",
+        "@repo/backend-common": "workspace:*",
+    "@repo/common": "workspace:*",
+    "@repo/db": "workspace:*",
+    "@repo/redis-utils": "workspace:*",
+    "@repo/typescript-config": "workspace:*"
   },
   "devDependencies": {
     "@repo/backend-common": "workspace:*",
