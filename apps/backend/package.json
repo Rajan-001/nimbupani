@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "pnpm install --no-frozen-lockfile && tsc -b ",
+    "build": "pnpm install && tsc -b ",
     "start": "node ./dist/index.js",
     "dev": "pnpm run build && pnpm run start"
   },
@@ -27,7 +27,10 @@
     "@repo/common": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/redis-utils": "workspace:*",
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+     "@types/node": "^24.0.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@repo/backend-common": "workspace:*",
