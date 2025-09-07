@@ -188,10 +188,15 @@ const removefromCart=async(productId)=>{
 
 
   return (
-    <div className='w-screen h-screen relative bg-yellow-50'>
+    <div className='w-screen   bg-yellow-50'>
+      <div className='w-full h-12 pr-24 relative flex justify-end items-end'>
+      <BsFillCartCheckFill onClick={()=>{SetCartClicked(true);addToCart()}} className='w-10 h-10 text-black cursor-pointer '/>
+    </div>
+
+     <div className='w-screen h-screen relative '>
       { loaded && 
       <>
-       <div className="w-[93vw] h-4 m-4 absolute top-2  flex justify-center items-center ">
+       <div className="invisible 2xl:visible w-[95vw] h-4 m-4 absolute top-2  flex justify-center items-center ">
         <svg className="block w-full h-full " viewBox="0 0 500 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
             <defs>
             <path
@@ -217,7 +222,8 @@ const removefromCart=async(productId)=>{
             <use href="#wave" y="0" />
         </svg>
         </div> 
-      <div className="w-[58vw] h-4 m-4 absolute  left-2 origin-top-left rotate-90 flex justify-center items-center ">
+
+      <div className="invisible 2xl:visible w-[45vw] h-4 m-4 absolute  left-2 origin-top-left rotate-90 flex justify-center items-center ">
         <svg className="block w-full h-full " viewBox="0 0 500 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
             <defs>
             <path
@@ -243,7 +249,8 @@ const removefromCart=async(productId)=>{
             <use href="#wave" y="0" />
         </svg>
         </div>
-     <div className="w-[58vw] h-4 m-4 absolute  right-[62px] origin-top-right rotate-270 flex justify-center items-center ">
+
+     <div className="invisible 2xl:visible w-[45vw] h-4 m-4 absolute  right-[62px] origin-top-right -rotate-90 flex justify-center items-center ">
         <svg className="block w-full h-full " viewBox="0 0 500 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
             <defs>
             <path
@@ -270,7 +277,7 @@ const removefromCart=async(productId)=>{
         </svg>
         </div>
     
-   <div className="w-[93vw] h-4 m-4 absolute bottom-2 flex justify-center items-center ">
+   <div className="invisible 2xl:visible w-[95vw] h-4 m-4 absolute bottom-2 flex justify-center items-center ">
         <svg className="block w-full h-full " viewBox="0 0 500 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
             <defs>
             <path
@@ -303,8 +310,8 @@ const removefromCart=async(productId)=>{
               <Image className='w-full h-full object-contain' unoptimized src={products[flavour]?.image_url} width={40} height={50} alt={"product Image"} />
              
             </div>
-             <div className="absolute top-14 right-32 circle w-24 h-24 text-xl text-center flex flex-col justify-center items-center"> <div>{products[flavour]?.quantity}</div><div>left</div></div>
-             <div className="absolute bottom-12 left-[250px] w-32 h-14 flex justify-center items-center bg-neutral-800 text-gray-100 text-xl">
+             <div className="absolute top-14 right-32 lg:right-42 xl:right-54 2xl:right-64 circle w-24 h-24 text-xl text-center flex flex-col justify-center items-center"> <div>{products[flavour]?.quantity}</div><div>left</div></div>
+             <div className="absolute bottom-12 left-6 sm:left-32 md:left-[250px] 2xl:left-96 w-32 h-14 flex justify-center items-center bg-neutral-800 text-gray-100 text-xl">
            <div><Image width={20} height={34} unoptimized className='object-cover w-10 h-10' src={"/svg/ruppe.svg"} alt={''}  /></div>
            <div className='w-2'></div>
            <div>{products[flavour].selling_price}</div>
@@ -372,11 +379,7 @@ const removefromCart=async(productId)=>{
 
         </div>
 
-          <button className="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown">
-        <i className="fas fa-shopping-cart fa-2x"></i><sub id="clickme">0</sub>
-        <span className="caret "></span>
-    </button>
-     <div  onClick={()=>{SetCartClicked(true);addToCart()}}><BsFillCartCheckFill className='w-10 h-10 text-black absolute top-2 right-44'/></div>
+     
      {
       cartClicked && 
      
@@ -449,6 +452,8 @@ const removefromCart=async(productId)=>{
      }
         </>
      } 
+     </div>
+
        {paymentStatus === "success" && <PaymentSuccessfulStatus />}
       {paymentStatus === "failed" && <PaymentFailureStatus />}
 
