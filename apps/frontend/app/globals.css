@@ -90,12 +90,12 @@
 
 
 /* gradient layer */
-.button-bg::before {
+.signup-bg::before {
   content: "";
   position: absolute;
   inset: -50%; /* extend outside for smooth spin */
   background: conic-gradient(
-    from 0deg,
+    from 90deg at 50% 50%,
     #facc15,
     #22d3ee,
     #34d399,
@@ -105,16 +105,64 @@
     #fb923c,
     #facc15
   );
-  animation: spin 8s linear infinite;
+  animation: signupspin 8s linear infinite;
   z-index: -1;
 }
 
+/* inner solid layer (so text is readable) */
+.signup-bg::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: #111; /* or white if you want light button */
+  border-radius: 10px;
+  z-index: -1;
+}
 
-@keyframes spin {
+@keyframes signupspin {
   0% {
     transform: rotate(0deg);
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+
+.login-bg::before {
+  content: "";
+  position: absolute;
+  inset: -50%; /* extend outside for smooth spin */
+  background: conic-gradient(
+    from 90deg at 50% 50%,
+    #facc15,
+    #22d3ee,
+    #34d399,
+    #f87171,
+    #a855f7,
+    #ec4899,
+    #fb923c,
+    #facc15
+  );
+  animation: loginspin 8s linear infinite;
+  z-index: -1;
+}
+
+/* inner solid layer (so text is readable) */
+.login-bg::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: #111; /* or white if you want light button */
+  border-radius: 10px;
+  z-index: -1;
+}
+
+@keyframes loginspin {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
   }
 }

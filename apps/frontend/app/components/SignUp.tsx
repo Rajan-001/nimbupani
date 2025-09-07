@@ -94,18 +94,17 @@ export default function SignUp({setSignUpModal,setLoginModal}:{setSignUpModal:an
         </div>
 
         {/* Sign Up Button */}
-        <button  
-          onClick={() => handleSignup()} 
-          className="relative w-full bg-gradient-to-r hero-bg 
-                    text-white p-4 rounded-xl font-semibold 
-                    shadow-md hover:shadow-2xl 
-                    transition-all duration-300 ease-in-out 
-                    transform hover:-translate-y-1 active:translate-y-0 overflow-hidden group"
+          <button  
+          onClick={handleSignup} 
+          className="relative w-full signup-bg
+                     text-white p-4 rounded-xl font-semibold shadow-md hover:shadow-2xl 
+                     transition-all duration-300 ease-in-out transform hover:-translate-y-1 
+                     active:translate-y-0 overflow-hidden group"
         >
           {/* Glow Ring Effect */}
-          <span className="absolute inset-0 rounded-xl button-bg opacity-50 blur-lg group-hover:opacity-70 transition-opacity duration-300"></span>
+           <span className="absolute inset-0 rounded-xl signup-bg opacity-50 blur-lg group-hover:opacity-70 transition-opacity duration-300"></span>
           
-          {/* Shimmer Effect */}s
+          {/* Shimmer Effect */}
           <span className="absolute top-0 left-[-150%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent 
                           transform skew-x-[-20deg] group-hover:animate-shimmer"></span>
 

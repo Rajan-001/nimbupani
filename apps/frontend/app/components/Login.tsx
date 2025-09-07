@@ -79,25 +79,27 @@ export default function Login({setSignUpModal,setLoginModal}:{setSignUpModal:any
         {/* Login Button */}
         <button  
           onClick={handleLogin} 
-          className="relative w-full button-bg
+          className="relative w-full login-bg
                      text-white p-4 rounded-xl font-semibold shadow-md hover:shadow-2xl 
                      transition-all duration-300 ease-in-out transform hover:-translate-y-1 
                      active:translate-y-0 overflow-hidden group"
-        >s
+        >
           {/* Glow Ring Effect */}
-          <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 opacity-50 blur-lg group-hover:opacity-70 transition-opacity duration-300"></span>
+           <span className="absolute inset-0 rounded-xl login-bg opacity-50 blur-lg group-hover:opacity-70 transition-opacity duration-300"></span>
           
           {/* Shimmer Effect */}
           <span className="absolute top-0 left-[-150%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent 
-                           transform skew-x-[-20deg] group-hover:animate-shimmer"></span>
+                          transform skew-x-[-20deg] group-hover:animate-shimmer"></span>
 
           {/* Button Text */}
           <span className="relative z-10">✨ Login</span>
         </button>
 
+        
+
         {/* Divider */}
         <div className="relative text-center my-8 text-slate-200 text-sm">
-          <span className="bg-slate-600 px-4 py-2 relative z-10 rounded-lg">Or login with</span>
+          <span className="bg-neutral-900 px-4 py-2 relative z-10 rounded-lg">Or login with</span>
           <div className="absolute top-1/2 left-0 right-0 h-px bg-slate-200 -z-10"></div>
         </div>
 
