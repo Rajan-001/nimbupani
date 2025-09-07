@@ -37,7 +37,7 @@ export default function Login({setSignUpModal,setLoginModal}:{setSignUpModal:any
 
   return (
     <div className="min-h-screen flex items-center justify-center p-5 bg-white/30 backdrop-blur-sm">
-      <div className="relative w-[420px] min-h-[480px] bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-400 rounded-3xl shadow-2xl p-8 text-white">
+      <div className="relative w-[420px] min-h-[480px] hero-bg rounded-3xl shadow-2xl p-8 text-white">
         
         {/* Header */}
         <div className="text-center mb-6">
@@ -79,11 +79,11 @@ export default function Login({setSignUpModal,setLoginModal}:{setSignUpModal:any
         {/* Login Button */}
         <button  
           onClick={handleLogin} 
-          className="relative w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
+          className="relative w-full button-bg
                      text-white p-4 rounded-xl font-semibold shadow-md hover:shadow-2xl 
                      transition-all duration-300 ease-in-out transform hover:-translate-y-1 
                      active:translate-y-0 overflow-hidden group"
-        >
+        >s
           {/* Glow Ring Effect */}
           <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 opacity-50 blur-lg group-hover:opacity-70 transition-opacity duration-300"></span>
           

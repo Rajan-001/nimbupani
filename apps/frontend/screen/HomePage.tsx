@@ -37,6 +37,7 @@ const smoothY = useSpring(y, { stiffness: 100, damping: 20 });
   return (
     <div   ref={containerRef} onMouseMove={handleMouseMove} onMouseLeave={()=>{x.set(50);y.set(50);}} className='w-screen h-screen  relative  justify-center items-center overflow-hidden '>
             
+          
            
           <motion.div  onClick={(e)=>dispatch(increment()) }  style={{x:smoothX,y:smoothY}} className='w-28 cursor-pointer h-28 z-10  rounded-full bg-yellow-200 text-3xl text-blue-950  uppercase  absolute border-black p-4 border-2  flex justify-center items-center  '>
           <motion.p>Tap</motion.p>
@@ -95,9 +96,9 @@ const smoothY = useSpring(y, { stiffness: 100, damping: 20 });
           <Button buttonText="Order" />
         </div>
       </div>
-       <div className='z-1 absolute flex top-32 left-1/4 h-fit w-fit  '>
+       <motion.div  initial={{ opacity:0,y:4,x:0 }} animate={{opacity:1,y:0,x:4}} transition={{duration:0.6}} className='z-1 absolute flex top-32 left-1/4 h-fit w-fit  '>
           <Image src="/svg/Bring-On-Cheers.svg" className=' h-[60vh] w-[50vw]' width={20} height={30} alt="4rew" />
-         </div>
+         </motion.div>
   <div className='absolute z-2 flex top-0 left-1/7 h-fit w-fit bg-transparent '>
        <video autoPlay muted loop src={`${colorVariants[count].video}`} className='h-[95vh] w-[70vw] bg-transparent '/>
            </div>

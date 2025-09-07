@@ -45,7 +45,7 @@ export default function SignUp({setSignUpModal,setLoginModal}:{setSignUpModal:an
     <div id="form-container" className="relative w-full min-h-[700px] [transform-style:preserve-3d] transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]">
 
       {/* FRONT SIDE */}
-      <div className="absolute w-full min-h-[700px] backface-hidden bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 backdrop-blur-xl border border-white/30 rounded-3xl p-10 shadow-2xl flex flex-col animate-fadeInUp">
+      <div className="absolute w-full min-h-[700px] backface-hidden hero-bg backdrop-blur-xl border border-white/30 rounded-3xl p-10 shadow-2xl flex flex-col animate-fadeInUp">
         
         {/* Title */}
         <div className="text-center mb-8">
@@ -59,7 +59,7 @@ export default function SignUp({setSignUpModal,setLoginModal}:{setSignUpModal:an
 
         {/* Name Field */}
         <div className="mb-5">
-          <label className="block text-slate-200 text-sm font-semibold mb-2">Name</label>
+          <label className="block text-slate-50 text-sm font-semibold mb-2">Name</label>
           <input 
             onChange={(e) => SetName(e.target.value)}
             type="text" 
@@ -70,7 +70,7 @@ export default function SignUp({setSignUpModal,setLoginModal}:{setSignUpModal:an
 
         {/* Email Field */}
         <div className="mb-5">
-          <label className="block text-slate-200 text-sm font-semibold mb-2">Email</label>
+          <label className="block text-slate-50 text-sm font-semibold mb-2">Email</label>
           <input 
             onChange={(e) => setEmail(e.target.value)}
             type="email" 
@@ -81,7 +81,7 @@ export default function SignUp({setSignUpModal,setLoginModal}:{setSignUpModal:an
 
         {/* Password Field */}
         <div className="relative mb-6">
-          <label className="block text-slate-200 text-sm font-semibold mb-2">Password</label>
+          <label className="block text-slate-50 text-sm font-semibold mb-2">Password</label>
           <input 
             onChange={(e) => setPassword(e.target.value)}
             type="password" 
@@ -96,16 +96,16 @@ export default function SignUp({setSignUpModal,setLoginModal}:{setSignUpModal:an
         {/* Sign Up Button */}
         <button  
           onClick={() => handleSignup()} 
-          className="relative w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
+          className="relative w-full bg-gradient-to-r hero-bg 
                     text-white p-4 rounded-xl font-semibold 
                     shadow-md hover:shadow-2xl 
                     transition-all duration-300 ease-in-out 
                     transform hover:-translate-y-1 active:translate-y-0 overflow-hidden group"
         >
           {/* Glow Ring Effect */}
-          <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 opacity-50 blur-lg group-hover:opacity-70 transition-opacity duration-300"></span>
+          <span className="absolute inset-0 rounded-xl button-bg opacity-50 blur-lg group-hover:opacity-70 transition-opacity duration-300"></span>
           
-          {/* Shimmer Effect */}
+          {/* Shimmer Effect */}s
           <span className="absolute top-0 left-[-150%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent 
                           transform skew-x-[-20deg] group-hover:animate-shimmer"></span>
 
@@ -116,7 +116,7 @@ export default function SignUp({setSignUpModal,setLoginModal}:{setSignUpModal:an
 
         {/* Divider */}
         <div className="relative text-center my-8">
-          <span className="bg-indigo-600 px-4 py-1 rounded-full text-slate-100 text-xs font-medium relative z-10 shadow-md">Or sign up with</span>
+          <span className="bg-neutral-900 px-4 py-1 rounded-full text-slate-100 text-xs font-medium relative z-10 shadow-md">Or sign up with</span>
           <div className="absolute top-1/2 left-0 right-0 h-px bg-slate-300 opacity-50 -z-10"></div>
         </div>
 
@@ -146,9 +146,7 @@ export default function SignUp({setSignUpModal,setLoginModal}:{setSignUpModal:an
       </div>
 
       {/* BACK SIDE (For flipping animation later) */}
-      <div className="absolute w-full min-h-[700px] backface-hidden bg-white/95 backdrop-blur-xl border border-white/30 rounded-3xl p-8 shadow-2xl flex flex-col rotate-y-180 animate-fadeInUp">
-        {/* Future Login UI here */}
-      </div>
+    
 
     </div>
   </div> 

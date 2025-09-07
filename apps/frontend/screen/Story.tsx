@@ -4,11 +4,13 @@ import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import React,{useRef} from 'react'
 import Image from 'next/image'
 import { Button } from '../app/components/Button'
+import { useRouter } from 'next/navigation'
 
 export const Story = () => {
     const container=useRef(null)
     const story=useRef(null)
   const ImageStory=useRef(null)
+  const router=useRouter()
 
  const {scrollYProgress}=useScroll({
     target:container,
@@ -102,12 +104,12 @@ return (
             <div className='text-3xl pl-4 mt-8 font-bold'>
              <Image className='inline-block h-12 w-12 -ml-14' src={"/svg/drip.svg"} width={40} height={40} alt="Charlie"/>  Meet Charlie
             </div>
-            <div className='text-3xl mt-12 leading-12'>
+            <div className='text-3xl mt-12 leading-12 text-blue-950 font-semibold'>
                Charlie cares for healthy people on a healthy planet. Inspiring others to do the same. Transparent about what we’re already doing and about what’s on the bucket list.
             </div>
            <Image className='inline h-2 w-36 absolute left-34 ' src={"/svg/underline.svg"} width={40} height={40} alt="Charlie"/> 
-            <div className='mt-16 '>
-            <Button buttonText={'Order Now'}/>
+            <div className='mt-16  ' onClick={()=>router.push("/order")}>
+            <Button  buttonText={'Order Now'}/>
             </div>
          </div>
       <div className='w-full h-full flex justify-center items-center'>
@@ -132,7 +134,7 @@ return (
       <div className=' w-screen bg-lime-200  flex flex-row '>
          <div className='w-1/2  sticky top-0 h-screen flex flex-col justify-center items-start p-8'>
          <Button buttonText={'WHAT THE PLANET'}/>
-         <div className='w-full  text-4xl leading-18 py-12 px-26 '> 
+         <div className='w-full  text-4xl leading-18 py-12 px-26 font-bold text-blue-950 '> 
           Charlie wants her to stay pretty as well
          </div>
          </div>
@@ -143,8 +145,8 @@ return (
                <div className='w-full h-56 flex justify-center items-center '>
                <Image src={"/svg/Charlie-organic.svg"} className='w-52 h-full object-cover' width={30}  height={90} alt='Charlie Organic' />
                </div>
-               <div className=''><h1 className='text-5xl uppercase px-4'>Yes we can. Can!</h1>
-                  <div className='text-3xl my-6 px-4 leading-12'>Cans, crafted from permanent aluminum, offer unique recycling advantages. Unlike plastic bottles, cans can be recycled endlessly, boasting the world’….
+               <div className=''><h1 className='text-5xl uppercase  px-4 font-bold text-blue-950'>Yes we can. Can!</h1>
+                  <div className='text-3xl my-6 px-4 leading-12 font-medium text-blue-900'>Cans, crafted from permanent aluminum, offer unique recycling advantages. Unlike plastic bottles, cans can be recycled endlessly, boasting the world’….
 
                   </div>
                   </div>
@@ -154,8 +156,8 @@ return (
                <div className='w-full h-56 flex justify-center items-center '>
                <Image src={"/svg/co2-neutral.svg"} className='w-52 h-full object-cover' width={30}  height={90} alt='Charlie Organic' />
                </div>
-               <div className=''><h1 className='text-5xl uppercase px-4'>ORGANIC FRUITS</h1>
-                  <div className='text-3xl my-6 px-4 leading-12'>Organic farming reduces pollution, erosion, and energy use, yet improves soil, health for insects and birds, conserving water on the way. We know it’s a lot so we tried to keep!
+               <div className=''><h1 className='text-5xl uppercase px-4 font-bold text-blue-950'>ORGANIC FRUITS</h1>
+                  <div className='text-3xl my-6 px-4 leading-12 font-medium text-blue-900'>Organic farming reduces pollution, erosion, and energy use, yet improves soil, health for insects and birds, conserving water on the way. We know it’s a lot so we tried to keep!
              
                   </div>
                   </div>
@@ -165,8 +167,8 @@ return (
                <div className='w-full h-56 flex justify-center items-center '>
                <Image src={"/svg/bio-organic.svg"} className='w-52 h-full object-cover' width={30}  height={90} alt='Charlie Organic' />
                </div>
-               <div className=''><h1 className='text-5xl uppercase px-4'>Yes we can. Can!</h1>
-                  <div className='text-3xl my-6 px-4 leading-12'> Cans, crafted from permanent aluminum, offer unique recycling advantages. Unlike plastic bottles, cans can be recycled endlessly, boasting the world’….
+               <div className=''><h1 className='text-5xl uppercase px-4 font-bold text-blue-950'>Yes we can. Can!</h1>
+                  <div className='text-3xl my-6 px-4 leading-12 font-medium text-blue-900'> Cans, crafted from permanent aluminum, offer unique recycling advantages. Unlike plastic bottles, cans can be recycled endlessly, boasting the world’….
              
                   </div>
                   </div>

@@ -24,13 +24,14 @@ export const Cart = () => {
 
  useEffect(()=>{
   async function fetchProductDetails(){
-    console.log()
 const response=await fetch(`${process.env.NEXT_PUBLIC_API_URL!}/get-all-product-detail`)
 const products=await response.json();
+console.log(products)
  SetProducts(products)
  SetLoaded(true)
   }
   fetchProductDetails()
+  
     const script = document.createElement("script");
   script.src = "https://checkout.razorpay.com/v1/checkout.js";
   script.async = true;
@@ -44,6 +45,8 @@ const products=await response.json();
     try {
       if(quantity>0)
       {
+        console.log("flavour ",flavour)
+        console.log(" this is from added cart",products[flavour]?.selling_price)
      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-cart`, {
       method: "POST",
       credentials:'include',
@@ -58,12 +61,13 @@ const products=await response.json();
         selling_price:products[flavour]?.selling_price
       }),
     });
-    
-    const data = await response.json();
     if (!response.ok) {
         router.push("/profile")
-      throw new Error(data.message || "Failed to add to cart");
+
+      throw new Error( "Failed to add to cart");
     }
+    
+  
 
    getCart()
   }
@@ -84,11 +88,12 @@ const products=await response.json();
       
     });
 
-    const data = await res.json();
+    
+    console.log(res)
     if (!res.ok) {
         router.push("/profile")
     }else{
-    
+    const data = await res.json();
     const cartList=data.response.cartItem;
     SetCartList(cartList)
     //@ts-ignore

@@ -19,12 +19,19 @@ import { connect } from "http2";
 
 const app=express()
 app.use(express.json())
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000"
+
 app.use(cors({
-  origin: "http://localhost:3000", // allow frontend URL
-  methods: ["GET", "POST","DELETE"],
+  origin: (origin, callback) => {
+    if (!origin || origin === FRONTEND_URL) {
+      callback(null, true);
+    } else {
+      console.warn("Blocked CORS request from origin:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
-
 
 app.use(cookieParser())
 
